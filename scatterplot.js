@@ -12,14 +12,14 @@ var xScaleStart;
 var xScaleEnd;
 
 var margin = {
-	top: 50,
-	right: 20,
-	bottom: 20,
+	top: 10,
+	right: 100,
+	bottom: 50,
 	left: 100
 };
 
-var width = 900 - margin.left - margin.right;
-var height = 700 - margin.top - margin.bottom;
+var width = 800 - margin.left - margin.right;
+var height = 600 - margin.top - margin.bottom;
 
 var formatTime = d3.time.format("%M:%S");
 
@@ -98,6 +98,21 @@ function buildPlot(data) {
 			}
 		});
 
+    svg.selectAll("text")
+	  .data(data)
+	  .enter()
+	  .append("text")
+	  .text(function(d){ return d.Name})
+	  .attr({   
+	    x: function(d){ return x(timeDiff(d)) + 10;},
+	    y: function(d){ return y(d.Place);},
+	    "font-size": "10px",
+	    "font-family": "sans-serif",
+	    "fill": "black",
+	    "text-anchor": "start"
+	  });
+
+
 	svg.append('g')
 		.attr('class', 'x axis')
 		.attr('transform', 'translate(0,' + height + ')')
@@ -106,6 +121,18 @@ function buildPlot(data) {
 	svg.append('g')
 		.attr('class', 'y axis')
 		.call(yAxis);
+
+	svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", -margin.left/2)
+        .attr("x", -height/3)
+        .style("text-anchor", "end")
+        .text("Ranking");
+
+    svg.append("text")
+        .attr("y", height + margin.bottom)
+        .attr("x", margin.left + width/4)
+        .text("Minutes Behind Fastest Time");
 }
 
 
